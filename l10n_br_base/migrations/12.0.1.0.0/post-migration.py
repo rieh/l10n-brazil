@@ -18,8 +18,8 @@ def migrate(env, version):
         SELECT nextval('state_tax_numbers_id_seq'), inscr_est, partner_id, 
         state_id FROM other_inscricoes_estaduais;
         ''')
-    cr.execute(
-        '''UPDATE res_partner rp SET city_id=(
-        SELECT id FROM res_city WHERE ibge_code=(
-        SELECT ibge_code FROM l10n_br_base_city WHERE id=rp.l10n_br_city_id))
-        ''')
+    # cr.execute(
+    #     '''UPDATE res_partner rp SET city_id=(
+    #     SELECT id FROM res_city WHERE ibge_code=(
+    #     SELECT ibge_code FROM l10n_br_base_city WHERE id=rp.l10n_br_city_id))
+    #     ''')
