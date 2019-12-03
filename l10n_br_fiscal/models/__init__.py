@@ -46,6 +46,7 @@ from . import res_config_settings
 from . import uom_category
 from . import uom_uom
 from . import uom_uom_alternative
+from . import natureza_operacao
 
 # from . import l10n_br_account_product_document_related
 # from . import l10n_br_account_product_import_declaration

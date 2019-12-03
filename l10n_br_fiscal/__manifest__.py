@@ -14,6 +14,7 @@
         # security
         "security/fiscal_security.xml",
         "security/ir.model.access.csv",
+
         # Data
         "data/l10n_br_fiscal_data.xml",
         "data/uom_data.xml",
@@ -27,6 +28,7 @@
         "data/partner_profile_data.xml",
         "data/l10n_br_fiscal_server_action.xml",
         "data/ir_cron.xml",
+
         # Views
         "views/cnae_view.xml",
         "views/cfop_view.xml",
@@ -61,10 +63,15 @@
         "views/document_line_view.xml",
         "views/document_fiscal_mixin_view.xml",
         "views/document_fiscal_line_mixin_view.xml",
+        "views/uom_uom.xml",
+        'views/l10n_br_fiscal_natureza_operacao.xml',
+
+        # Settings and Actions
         "views/res_config_settings_view.xml",
         "views/l10n_br_fiscal_action.xml",
-        "views/l10n_br_fiscal_menu.xml",
-        "views/uom_uom.xml",
+
+        # Menu
+        'views/l10n_br_fiscal_menu.xml',
         # 'data/l10n_br_account_product_sequence.xml',
         # 'data/l10n_br_account_data.xml',
         # 'data/l10n_br_account_product_data.xml',
@@ -87,7 +94,8 @@
         # 'wizards/account_invoice_refund_view.xml',
         # 'report/account_invoice_report_view.xml',
     ],
-    "demo": [
+    'demo': [
+        'demo/l10n_br_fiscal_natureza_operacao.xml',
         #'demo/partner_demo.xml',
         # 'demo/account_fiscal_position_rule_demo.xml',
         # 'demo/product_taxes.yml',
