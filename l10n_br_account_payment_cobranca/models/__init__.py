@@ -17,4 +17,5 @@ from . import l10n_br_cnab_lote
 from . import res_company
 from . import res_partner_bank
 from . import res_partner
+from . import account_journal
 from .. import constantes

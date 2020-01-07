@@ -16,7 +16,7 @@
     "data": [
         "data/l10n_br_payment_export_type.xml",
         "data/boleto_data.xml",
-        "data/ir_cron.xml",
+        # "data/ir_cron.xml",
         "data/account_analytic_tag_data.xml",
         "security/cnab_cobranca_security.xml",
         "views/res_company.xml",

@@ -45,13 +45,13 @@
         <field name="name">view.l10n_br_account.invoice.form.form.inherit
         </field>
         <field name="model">account.invoice</field>
-        <field name="inherit_id"
-               ref="l10n_br_account.view_l10n_br_account_invoice_form"/>
+<!--        <field name="inherit_id" ref="l10n_br_account.view_l10n_br_account_invoice_form"/>-->
+        <field name="inherit_id" ref="account_payment_order.invoice_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='move_id']" position="after">
-                <field name="state_cnab"/>
-                <field name="nosso_numero"/>
-            </xpath>
+<!--            <xpath expr="//field[@name='move_id']" position="after">-->
+<!--                <field name="state_cnab"/>-->
+<!--                <field name="nosso_numero"/>-->
+<!--            </xpath>-->
             <header position="inside">
                 <field name="eval_state_cnab" invisible="1"/>
                 <button name="%(account_invoice_api_action)d"
@@ -113,10 +113,10 @@
             <filter name="unpaid" position="attributes">
                 <attribute name="domain">[('state','!=','paid')]</attribute>
             </filter>
-            <field name="journal_id" position="after">
-                <field name="eval_state_cnab"/>
-                <field name="eval_situacao_pagamento"/>
-            </field>
+<!--            <field name="journal_id" position="after">-->
+<!--                <field name="eval_state_cnab"/>-->
+<!--                <field name="eval_situacao_pagamento"/>-->
+<!--            </field>-->
             <field name="partner_id" position="before">
                 <separator string="Estado CNAB"/>
                 <group expand="0" string="Estado CNAB">

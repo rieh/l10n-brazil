@@ -17,6 +17,27 @@ _logger = logging.getLogger(__name__)
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
+    # TODO: Remover esse codigo apos o merge do l10n_br_account
+    @api.multi
+    @api.depends('state', 'move_id.line_ids', 'move_id.line_ids.account_id',
+                 'journal_id.revenue_expense')
+    def _compute_receivables(self):
+        for record in self:
+            lines = self.env['account.move.line']
+            for line in record.move_id.line_ids:
+                if (line.account_id.id == record.account_id.id and
+                    line.account_id.internal_type in
+                    ('receivable', 'payable') and
+                    record.journal_id.revenue_expense):
+                    lines |= line
+            record.move_line_receivable_id = lines.sorted()
+
+    move_line_receivable_id = fields.Many2many(
+        comodel_name='account.move.line',
+        string=u'Receivables',
+        store=True,
+        compute='_compute_receivables')
+
     active = fields.Boolean(string=u"Ativo", default=True)
 
     eval_state_cnab = fields.Selection(
