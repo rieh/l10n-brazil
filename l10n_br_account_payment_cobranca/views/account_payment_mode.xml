@@ -16,6 +16,9 @@
                            attrs="{'invisible': [('product_tax_id', '=', False)], 'required': [('product_tax_id', '!=', False)]}"/>
                 </group>
             </group>
+            <field name="no_debit_before_maturity" position="before">
+                <field name="automatic_payment_order"/>
+            </field>
             <group name="l10n_br_account_payment_order-geral" position="inside">
                 <field name="condicao_emissao_papeleta"/>
                 <field name="cnab_percent_interest"/>

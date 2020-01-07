@@ -124,6 +124,9 @@ class PaymentMode(models.Model):
         string="Conta Padrão",
         help="Conta padrão para Taxa",
     )
+    automatic_payment_order = fields.Boolean(
+        string="Adicionar automaticamente a order de pagamento"
+    )
 
     @api.onchange("product_tax_id")
     def _onchange_product_tax_id(self):
