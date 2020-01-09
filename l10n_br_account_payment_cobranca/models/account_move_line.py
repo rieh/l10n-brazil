@@ -100,16 +100,19 @@ class AccountMoveLine(models.Model):
         """
         state_cnab = vals.get("state_cnab")
 
-        if state_cnab and (
-            self.state_cnab == "done"
-            or (
-                self.state_cnab in ["accepted", "accepted_hml"]
-                and state_cnab not in ["accepted", "accepted_hml", "done"]
-            )
-        ):
-            vals.pop("state_cnab", False)
+        for record in self:
+            temp_vals = vals.copy()
+            if state_cnab and (
+                record.state_cnab == "done"
+                or (
+                    record.state_cnab in ["accepted", "accepted_hml"]
+                    and state_cnab not in ["accepted", "accepted_hml", "done"]
+                )
+            ):
+                temp_vals.pop("state_cnab", False)
 
-        if self.situacao_pagamento not in ["inicial", "aberta"]:
-            vals.pop("situacao_pagamento", False)
+            if record.situacao_pagamento not in ["inicial", "aberta"]:
+                temp_vals.pop("situacao_pagamento", False)
 
-        return super(AccountMoveLine, self).write(vals)
+            return super(AccountMoveLine, record).write(temp_vals)
+        return True
