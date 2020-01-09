@@ -463,3 +463,9 @@ class AccountInvoice(models.Model):
             receivable_id.residual = inv.residual
 
         return res
+
+    @api.multi
+    def action_invoice_paid(self):
+        super(AccountInvoice, self).action_invoice_paid()
+        for record in self:
+            record.create_account_payment_line_baixa()
