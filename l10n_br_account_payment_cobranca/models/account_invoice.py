@@ -395,19 +395,19 @@ class AccountInvoice(models.Model):
                     count += 1
                 if new_payorder:
                     inv.message_post(
-                        _(
+                        body=(_(
                             "%d payment lines added to the new draft payment "
                             "order %s which has been automatically created."
                         )
-                        % (count, payorder.name)
+                              % (count, payorder.name))
                     )
                 else:
                     inv.message_post(
-                        _(
+                        body=(_(
                             "%d payment lines added to the existing draft "
                             "payment order %s."
                         )
-                        % (count, payorder.name)
+                              % (count, payorder.name))
                     )
 
     @api.multi
