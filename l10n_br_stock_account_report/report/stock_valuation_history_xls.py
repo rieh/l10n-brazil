@@ -61,13 +61,6 @@ class StockHistoryXls(report_xls):
                           _render("line.get('product_id', False) and "
                                   "line.get('product_id')[1] or ''")],
                 'totals': [1, 0, 'text', None]},
-            'price_unit_on_quant': {
-                'header': [1, 25, 'text',
-                           _render("('Preço de custo no periodo')")],
-                'lines': [1, 0, 'number',
-                          _render("line.get('price_unit_on_quant')"),
-                          None, self.line_cell_style_decimal],
-                'totals': [1, 0, 'text', None]},
             'quantity': {
                 'header': [1, 15, 'text', _render("('Quantidade')")],
                 'lines': [1, 0, 'number', _render("line.get('quantity', 0)")],
@@ -111,7 +104,6 @@ class StockHistoryXls(report_xls):
                 'fiscal_classification_id',
                 # 'product_id_count',
                 'quantity',
-                'price_unit_on_quant',
                 'inventory_value'
             ])
         row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
@@ -134,7 +126,6 @@ class StockHistoryXls(report_xls):
                     'product_id',
                     'fiscal_classification_id',
                     'quantity',
-                    'price_unit_on_quant',
                     'inventory_value'
                 ])
             row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
