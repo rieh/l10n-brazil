@@ -38,7 +38,7 @@ class DanfeXml(object):
 
     def __init__(self):
         self.xml = open(
-            DIRNAME + '23200118386751000153550010000015991035334421-nfe.xml',
+            DIRNAME + '/23200118386751000153550010000015991035334421-nfe.xml',
             'rb'
         ).read()
         self.object_xml = objectify.fromstring(self.xml)
@@ -48,19 +48,19 @@ class DanfeXml(object):
         self.imprime_canhoto = True
 
     def _gera_pdf(self, template):
-        arq_template = '/tmp/' + uuid4().hex
+        arq_template = DIRNAME + '/' + uuid4().hex
         open(arq_template, 'wb').write(template.read())
         template.close()
 
         arq_temp = uuid4().hex
-        arq_odt = '/tmp/' + arq_temp + '.odt'
-        arq_pdf = '/tmp/' + arq_temp + '.pdf'
+        arq_odt = DIRNAME + '/' + arq_temp + '.odt'
+        arq_pdf = DIRNAME + '/' + arq_temp + '.pdf'
 
         t = Template(arq_template, arq_odt)
         t.render({'danfe': self})
 
         lo = sh.libreoffice('--headless', '--invisible', '--convert-to',
-                            'pdf', '--outdir', '/tmp', arq_odt, _bg=True)
+                            'pdf', '--outdir', DIRNAME, arq_odt, _bg=True)
         lo.wait()
 
         self.conteudo_pdf = open(arq_pdf, 'rb').read()
@@ -73,5 +73,5 @@ class DanfeXml(object):
         template = open(os.path.join(DIRNAME, 'danfe.odt'), 'rb')
         self._gera_pdf(template)
         nome_arq = DIRNAME + \
-            '23200118386751000153550010000015991035334421' + '.pdf'
+            '/23200118386751000153550010000015991035334421' + '.pdf'
         open(nome_arq, 'wb').write(self.conteudo_pdf)
