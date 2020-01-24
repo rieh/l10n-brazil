@@ -462,6 +462,15 @@ class NFe200(FiscalDocument):
                 "%.2f" % invoice_line.ipi_value)
             self.det.imposto.IPI.cEnq.valor = str(
                 invoice_line.ipi_guideline_id.code or '999').zfill(3)
+
+            # IPI Devolução
+            if self.nfe.infNFe.ide.finNFe.valor == 4:
+                if invoice_line.product_id:
+                    self.det.impostoDevol.IPI.vIPIDevol.valor = \
+                        str("%.2f" % invoice_line.product_id.ipi_devol)
+                self.det.impostoDevol.pDevol.valor = \
+                    str("%.2f" % invoice_line.ipi_devol_percent)
+
             # II
             self.det.imposto.II.vBC.valor = str("%.2f" % invoice_line.ii_base)
             self.det.imposto.II.vDespAdu.valor = str(
@@ -689,6 +698,9 @@ class NFe200(FiscalDocument):
                 "%.2f" % invoice.ii_value)
             self.nfe.infNFe.total.ICMSTot.vIPI.valor = str(
                 "%.2f" % invoice.ipi_value)
+            self.nfe.infNFe.total.ICMSTot.vIPIDevol.valor = str("%.2f" % sum(
+                [det.impostoDevol.IPI.vIPIDevol.valor
+                 for det in self.nfe.infNFe.det]))
             self.nfe.infNFe.total.ICMSTot.vPIS.valor = str(
                 "%.2f" % invoice.pis_value)
             self.nfe.infNFe.total.ICMSTot.vCOFINS.valor = str(
