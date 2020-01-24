@@ -2,6 +2,8 @@
 # Copyright (C) 2013  Renato Lima - Akretion
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
+from openerp.addons import decimal_precision as dp
+
 from openerp import models, fields
 
 from .l10n_br_account_product import (
@@ -54,3 +56,12 @@ class ProductTemplate(models.Model):
 
     estd_national_taxes_perct = fields.Float(
         related='fiscal_classification_id.estd_national_taxes_perct')
+
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    ipi_devol = fields.Float(
+        string='IPI Devolução',
+        digits=dp.get_precision('Account'),
+    )
