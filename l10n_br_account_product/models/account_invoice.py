@@ -1847,6 +1847,13 @@ class AccountInvoiceLine(models.Model):
     ipi_percent = fields.Float(
         'Perc IPI', required=True, digits=dp.get_precision('Discount'),
         default=0.00)
+    eval_ipi_devol = fields.Float(
+        'Valor IPI Devol',
+        related='product_id.ipi_devol',
+    )
+    ipi_devol_percent = fields.Float(
+        'Perc IPI Devol', required=False, digits=dp.get_precision('Discount'),
+        default=0.00)
     ipi_cst_id = fields.Many2one(
         'account.tax.code', 'CST IPI', domain=[('domain', '=', 'ipi')])
     ipi_guideline_id = fields.Many2one(
