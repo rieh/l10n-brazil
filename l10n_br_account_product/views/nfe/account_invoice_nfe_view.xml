@@ -578,14 +578,19 @@
                                             <field name="ipi_cst_id"/>
                                             <field name="ipi_type"/>
                                             <field name="ipi_base"/>
-                                            <field name="ipi_devol_percent"/>
                                         </group>
                                         <group>
                                             <field name="ipi_guideline_id"/>
                                             <field name="ipi_base_other"/>
                                             <field name="ipi_percent"/>
                                             <field name="ipi_value"/>
-                                            <field name="eval_ipi_devol" readonly="1"/>
+                                        </group>
+                                    </group>
+                                    <group string="IPI Devolução">
+                                        <group>
+                                            <field name="ipidevol_base"/>
+                                            <field name="ipidevol_value"/>
+                                            <field name="ipi_devol_percent"/>
                                         </group>
                                     </group>
                                 </page>

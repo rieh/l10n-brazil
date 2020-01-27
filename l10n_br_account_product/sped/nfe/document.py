@@ -465,9 +465,8 @@ class NFe200(FiscalDocument):
 
             # IPI Devolução
             if self.nfe.infNFe.ide.finNFe.valor == 4:
-                if invoice_line.product_id:
-                    self.det.impostoDevol.IPI.vIPIDevol.valor = \
-                        str("%.2f" % invoice_line.product_id.ipi_devol)
+                self.det.impostoDevol.IPI.vIPIDevol.valor = \
+                    str("%.2f" % invoice_line.ipidevol_value)
                 self.det.impostoDevol.pDevol.valor = \
                     str("%.2f" % invoice_line.ipi_devol_percent)
 

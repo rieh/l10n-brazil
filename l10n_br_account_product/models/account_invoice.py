@@ -1847,10 +1847,15 @@ class AccountInvoiceLine(models.Model):
     ipi_percent = fields.Float(
         'Perc IPI', required=True, digits=dp.get_precision('Discount'),
         default=0.00)
-    eval_ipi_devol = fields.Float(
-        'Valor IPI Devol',
-        related='product_id.ipi_devol',
-    )
+    ipidevol_base = fields.Float(
+        'Base IPI Devol', required=True, digits=dp.get_precision('Account'),
+        default=0.00)
+    ipidevol_value = fields.Float(
+        'Valor IPI Devol', required=True, digits=dp.get_precision('Account'),
+        default=0.00)
+    ipidevol_percent = fields.Float(
+        'Perc IPI Devol', required=False, digits=dp.get_precision('Discount'),
+        default=0.00)
     ipi_devol_percent = fields.Float(
         'Perc IPI Devol', required=False, digits=dp.get_precision('Discount'),
         default=0.00)
@@ -2105,6 +2110,14 @@ class AccountInvoiceLine(models.Model):
             'ipi_base': tax.get('total_base', 0.0),
             'ipi_value': tax.get('amount', 0.0),
             'ipi_percent': tax.get('percent', 0.0) * 100,
+        }
+        return result
+
+    def _amount_tax_ipidevol(self, tax=None):
+        result = {
+            'ipidevol_base': tax.get('total_base', 0.0),
+            'ipidevol_value': tax.get('amount', 0.0),
+            'ipidevol_percent': tax.get('percent', 0.0)*100
         }
         return result
 
@@ -2395,6 +2408,9 @@ class AccountInvoiceLine(models.Model):
                     elif kwargs.get('account_id'):
                         account_id = kwargs['account_id']
                         taxes |= account_obj.browse(account_id).tax_ids
+                if ctx.get('type') in ('in_refund', 'out_refund'):
+                    if product.ipi_devol_tax_id:
+                        taxes |= product.ipi_devol_tax_id
                 tax_ids = fp.with_context(ctx).map_tax(taxes)
                 result_rule['value']['invoice_line_tax_id'] = tax_ids.ids
                 result['value'].update(self._get_tax_codes(
