@@ -61,7 +61,7 @@ class ProductTemplate(models.Model):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    ipi_devol = fields.Float(
+    ipi_devol_tax_id = fields.Many2one(
         string='IPI Devolução',
-        digits=dp.get_precision('Account'),
+        comodel_name='account.tax',
     )

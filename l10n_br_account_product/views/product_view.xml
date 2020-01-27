@@ -48,8 +48,8 @@
             <field name="inherit_id" ref="product.product_normal_form_view" />
             <field name="arch" type="xml">
 
-                <field name="supplier_taxes_id" position="after">
-                    <field name="ipi_devol" widget="monetary"/>
+                <field name="taxes_id" position="after">
+                    <field name="ipi_devol_tax_id" domain="[('name', 'ilike', 'IPI Devol')]"/>
                 </field>
 
             </field>
