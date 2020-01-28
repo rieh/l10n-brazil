@@ -49,7 +49,7 @@
             <field name="arch" type="xml">
 
                 <field name="taxes_id" position="after">
-                    <field name="ipi_devol_tax_id" domain="[('name', 'ilike', 'IPI Devol')]"/>
+                    <field name="ipi_devol_tax_id" domain="[('domain', '=', 'ipidevol')]"/>
                 </field>
 
             </field>
