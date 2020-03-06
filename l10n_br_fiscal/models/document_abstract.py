@@ -102,7 +102,7 @@ class DocumentAbstract(models.AbstractModel):
 
     document_type_id = fields.Many2one(
         comodel_name="l10n_br_fiscal.document.type",
-        required=True)
+        )
 
     operation_name = fields.Char(
         string="Operation",
