@@ -46,8 +46,8 @@
         <header>
             <button name="action_document_confirm" type="object" string="Confirmar"   groups="l10n_br_fiscal.group_user"    states="em_digitacao"     class="oe_highlight"/>
             <button name="action_document_send"    type="object" string="Enviar"      groups="l10n_br_fiscal.group_user"    states="a_enviar,rejeitada"         class="oe_highlight"/>
-            <button name="visualizar_pdf" type="object" string="Visualizar PDF" groups="l10n_br_fiscal.group_user" states="a_enviar,enviada,autorizada,rejeitada,cancelada" class="oe_highlight"/>
-            <button name="visualizar_xml" type="object" string="Visualizar XML" groups="l10n_br_fiscal.group_user" states="a_enviar,enviada,autorizada,rejeitada,cancelada" class="oe_highlight"/>
+            <button name="view_pdf" type="object" string="Visualizar PDF" groups="l10n_br_fiscal.group_user" states="a_enviar,enviada,autorizada,rejeitada,cancelada" class="oe_highlight"/>
+            <button name="view_xml" type="object" string="Visualizar XML" groups="l10n_br_fiscal.group_user" states="a_enviar,enviada,autorizada,rejeitada,cancelada" class="oe_highlight"/>
             <button name="action_document_cancel"  type="object" string="Cancelar"    groups="l10n_br_fiscal.group_user"    states="em_digitacao,a_enviar,enviada,rejeitada,autorizada"/>
             <button name="action_document_correction" type="object" string="Carta de correção" groups="l10n_br_fiscal.group_user" states="autorizada"/>
 <!--                <button name="action_edoc_check" type="object"-->
@@ -65,6 +65,8 @@
           </div>
           <group name="l10n_br_fiscal" colspan="4">
             <field name="operation_id"/> <!-- USE MIXIN VIEW -->
+            <field name="edoc_purpose"/>
+            <field name="ind_final"/>
           </group>
           <group>
             <field name="issuer"/>
@@ -152,6 +154,9 @@
             <page nam="finance" string="Finance">
             </page>
             <page nam="others" string="Others">
+                <group>
+                    <field name="operation_name"/>
+                </group>
                 <group>
                     <group name="autorizacao" string="Autorização" colspan="4">
                         <field name="data_hora_autorizacao"/>

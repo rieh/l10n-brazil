@@ -8,7 +8,6 @@ from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..constants.fiscal import (
-    DOCUMENT_ISSUER_COMPANY,
     DOCUMENT_ISSUER_PARTNER
 )
 
@@ -18,7 +17,6 @@ class Document(models.Model):
     _inherit = [
         "l10n_br_fiscal.document.abstract",
         "l10n_br_fiscal.document.mixin",
-        "l10n_br_fiscal.document.workflow",
         "l10n_br_fiscal.document.electronic"]
     _description = "Fiscal Document"
 
@@ -35,6 +33,26 @@ class Document(models.Model):
     operation_id = fields.Many2one(
         default=_default_operation,
         domain=lambda self: self._operation_domain())
+
+    edoc_purpose = fields.Selection(
+        selection=[
+            ('1', 'Normal'),
+            ('2', 'Complementar'),
+            ('3', 'Ajuste'),
+            ('4', 'Devolução de mercadoria'),
+        ],
+        string='Finalidade',
+        default='1',
+    )
+
+    ind_final = fields.Selection(
+        selection=[
+            ('0', 'Não'),
+            ('1', 'Sim')
+        ],
+        string='Operação com consumidor final',
+        default='1',
+    )
 
     line_ids = fields.One2many(
         comodel_name="l10n_br_fiscal.document.line",
