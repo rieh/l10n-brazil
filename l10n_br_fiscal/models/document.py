@@ -27,6 +27,18 @@ class Document(models.Model):
 
     operation_type = fields.Selection(required=True, related=False)
 
+    comment_ids = fields.Many2many(
+        comodel_name="l10n_br_fiscal.comment",
+        relation="l10n_br_fiscal_document_comment_rel",
+        column1="document_id",
+        column2="comment_id",
+        string="Comments"
+    )
+
+    processed_comments = fields.Text(string="Processed Comments")
+
+    processed_line_comments = fields.Text(string="Processed Line Comments")
+
     operation_id = fields.Many2one(
         default=_default_operation,
         domain="[('state', '=', 'approved'), "
@@ -96,7 +108,7 @@ class Document(models.Model):
         super(Document, self).document_number()
         for record in self:
             if record.issuer == "company" and record.document_electronic and \
-                    not record.key:
+                not record.key:
                 record._generate_key()
 
     # TODO - este método deveria estar no l10n_br_nfe e o calculo da chave
@@ -155,3 +167,22 @@ class Document(models.Model):
         chave += str(digito)
         # FIXME: Fazer sufixo depender do modelo
         self.key = 'NFe' + chave
+
+    def _document_comment_vals(self):
+        return {
+            'user': self.env.user,
+            'ctx': self._context,
+            'doc': self,
+        }
+
+    def document_comment(self):
+        for record in self:
+            record.processed_comments = record.processed_comments and record.processed_comments + ' - ' or ''
+            record.processed_comments += record.comment_ids.compute_message(record._document_comment_vals())
+            record.line_ids.document_comment()
+
+    def _exec_after_SITUACAO_EDOC_A_ENVIAR(self, old_state, new_state):
+        super(Document, self)._exec_before_SITUACAO_EDOC_A_ENVIAR(
+            old_state, new_state
+        )
+        self.document_comment()
