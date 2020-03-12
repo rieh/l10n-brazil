@@ -108,7 +108,7 @@ class Document(models.Model):
         super(Document, self).document_number()
         for record in self:
             if record.issuer == "company" and record.document_electronic and \
-                not record.key:
+                    not record.key:
                 record._generate_key()
 
     # TODO - este método deveria estar no l10n_br_nfe e o calculo da chave
@@ -177,8 +177,10 @@ class Document(models.Model):
 
     def document_comment(self):
         for record in self:
-            record.processed_comments = record.processed_comments and record.processed_comments + ' - ' or ''
-            record.processed_comments += record.comment_ids.compute_message(record._document_comment_vals())
+            record.processed_comments = record.processed_comments and \
+                                        record.processed_comments + ' - ' or ''
+            record.processed_comments += record.comment_ids.compute_message(
+                record._document_comment_vals())
             record.line_ids.document_comment()
 
     def _exec_after_SITUACAO_EDOC_A_ENVIAR(self, old_state, new_state):
