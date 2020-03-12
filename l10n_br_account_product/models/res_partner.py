@@ -147,6 +147,7 @@ class AccountFiscalPosition(models.Model):
 
         for ncm_tax_def in product_ncm_tax_def:
             if ncm_tax_def.tax_id:
+                taxes += ncm_tax_def.tax_id
                 result[ncm_tax_def.tax_id.domain] = {
                     'tax': ncm_tax_def.tax_id,
                     'tax_code': ncm_tax_def.tax_code_id,

@@ -4,7 +4,7 @@
 
 import time
 
-from openerp import models, fields, api
+from openerp import models, fields, api, SUPERUSER_ID
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 
 from ..constantes import (
@@ -366,3 +366,8 @@ class AccountTax(models.Model):
             fiscal_position=fiscal_position, insurance_value=insurance_value,
             freight_value=freight_value, other_costs_value=other_costs_value,
             base_tax=base_tax)
+
+    def name_get(self, cr, uid, ids, context=None):
+        return super(AccountTax, self).name_get(
+            cr, SUPERUSER_ID, ids, context
+        )

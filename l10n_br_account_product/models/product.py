@@ -4,7 +4,7 @@
 
 from openerp.addons import decimal_precision as dp
 
-from openerp import models, fields
+from openerp import api, models, fields
 
 from .l10n_br_account_product import (
     PRODUCT_FISCAL_TYPE,
@@ -65,3 +65,28 @@ class ProductProduct(models.Model):
         string='IPI Devolução',
         comodel_name='account.tax',
     )
+    taxes_id = fields.Many2many(
+        string='Impostos de Clientes',
+        comodel_name='account.tax',
+        compute='_product_compute_taxes'
+    )
+    supplier_taxes_id = fields.Many2many(
+        string='Impostos do Fornecedor',
+        comodel_name='account.tax',
+        compute='_product_compute_taxes'
+    )
+
+    @api.multi
+    def _product_compute_taxes(self):
+        for product in self:
+            fc = product.fiscal_classification_id
+
+            taxes_ids = fc.sale_tax_ids.sudo().filtered(
+                lambda tax: tax.company_id == self.env.user.company_id
+            )
+            supplier_taxes_ids = fc.purchase_tax_ids.sudo().filtered(
+                lambda tax: tax.company_id == self.env.user.company_id
+            )
+
+            product.taxes_id = [[6, 0, taxes_ids.ids]]
+            product.supplier_taxes_id = [[6, 0, supplier_taxes_ids.ids]]

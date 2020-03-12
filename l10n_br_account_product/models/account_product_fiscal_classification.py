@@ -168,9 +168,9 @@ class AccountProductFiscalClassification(models.Model):
     def _compute_taxes(self):
         for fc in self:
             fc.sale_tax_ids = [line.tax_id.id for line in
-                               fc.sale_tax_definition_line]
+                               fc.sudo().sale_tax_definition_line]
             fc.purchase_tax_ids = [line.tax_id.id for line in
-                                   fc.purchase_tax_definition_line]
+                                   fc.sudo().purchase_tax_definition_line]
 
     @api.multi
     @api.depends('tax_estimate_ids')
@@ -209,19 +209,21 @@ class AccountProductFiscalClassification(models.Model):
 
     sale_tax_definition_line = fields.One2many(
         'l10n_br_tax.definition.sale',
-        'fiscal_classification_id', 'Taxes Definitions')
+        'fiscal_classification_id', 'Sale Taxes Definitions')
 
     sale_tax_ids = fields.Many2many(
         'account.tax', string='Sale Taxes',
-        compute='_compute_taxes', store=True)
+        compute='_compute_taxes',
+        store=True)
 
     purchase_tax_definition_line = fields.One2many(
         'l10n_br_tax.definition.purchase', 'fiscal_classification_id',
-        'Taxes Definitions')
+        'Purchase Taxes Definitions')
 
     purchase_tax_ids = fields.Many2many(
         'account.tax', string='Purchase Taxes',
-        compute='_compute_taxes', store=True)
+        compute='_compute_taxes',
+        store=True)
 
     tax_estimate_ids = fields.One2many(
         comodel_name='l10n_br_tax.estimate',
