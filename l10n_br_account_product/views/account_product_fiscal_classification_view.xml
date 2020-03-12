@@ -141,6 +141,7 @@
             <field name="arch" type="xml">
                 <tree string="Definição de Impostos" editable="bottom">
                     <field name="tax_id" domain="[('type_tax_use', 'in', ('sale', 'all'))]" select="1"/>
+                    <field name="company_id" readonly="1"/>
                     <field name="tax_domain" invisible="1"/>
                     <field name="tax_code_id" domain="[('domain', '=', tax_domain)]" select="1"/>
                     <field name="tax_ipi_guideline_id"/>
@@ -169,6 +170,7 @@
             <field name="arch" type="xml">
                 <tree string="Definição de Impostos" editable="bottom">
                     <field name="tax_id" domain="[('type_tax_use', 'in', ('purchase', 'all'))]" select="1"/>
+                    <field name="company_id" readonly="1"/>
                     <field name="tax_domain"  invisible="1"/>
                     <field name="tax_code_id" domain="[('domain', '=', tax_domain)]" select="1"/>
                     <field name="tax_ipi_guideline_id"/>
