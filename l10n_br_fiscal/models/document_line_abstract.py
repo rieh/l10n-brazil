@@ -123,9 +123,6 @@ class DocumentLineAbstract(models.AbstractModel):
         index=True,
         string="NBS")
 
-    notes = fields.Text(
-        string="Notes")
-
     # Amount Fields
     amount_estimate_tax = fields.Monetary(
         string="Amount Estimate Total",
