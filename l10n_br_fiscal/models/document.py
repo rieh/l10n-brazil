@@ -197,4 +197,3 @@ class Document(models.Model):
         action['domain'] = literal_eval(action['domain'])
         action['domain'].append(('id', '=', return_id.id))
         return action
-
