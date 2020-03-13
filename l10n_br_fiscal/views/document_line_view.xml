@@ -57,7 +57,7 @@
           </page>
           <page name="taxes" string="Taxes">
             <notebook>
-              <page name="issqn" string="ISSQN" attrs="{'invisible': [('fiscal_genre_code', '!=', '00')]}">
+              <page name="issqn" string="ISSQN" >
                 <group>
                   <field name="issqn_tax_id"/>
                 </group>
