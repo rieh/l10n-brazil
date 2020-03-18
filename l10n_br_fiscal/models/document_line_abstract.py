@@ -2,14 +2,8 @@
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from odoo import api, fields, models
-from odoo.addons import decimal_precision as dp
 
-from ..constants.fiscal import (
-    NCM_FOR_SERVICE_REF,
-    PRODUCT_FISCAL_TYPE,
-    PRODUCT_FISCAL_TYPE_SERVICE,
-    TAX_FRAMEWORK,
-)
+from ..constants.fiscal import TAX_FRAMEWORK
 
 
 class DocumentLineAbstract(models.AbstractModel):
@@ -67,13 +61,6 @@ class DocumentLineAbstract(models.AbstractModel):
                 # - Valor Rentenções
             )
 
-    @api.model
-    def _get_default_ncm_id(self):
-        fiscal_type = self.env.context.get("default_fiscal_type")
-        if fiscal_type == PRODUCT_FISCAL_TYPE_SERVICE:
-            ncm_id = self.env.ref(NCM_FOR_SERVICE_REF)
-            return ncm_id
-
     # used mostly to enable _inherits of account.invoice on fiscal_document
     # when existing invoices have no fiscal document.
     active = fields.Boolean(
@@ -102,6 +89,9 @@ class DocumentLineAbstract(models.AbstractModel):
         related="document_id.partner_id",
         string="Partner")
 
+    partner_company_type = fields.Selection(
+        related="partner_id.company_type")
+
     currency_id = fields.Many2one(
         comodel_name="res.currency",
         related="company_id.currency_id",
@@ -110,43 +100,6 @@ class DocumentLineAbstract(models.AbstractModel):
     product_id = fields.Many2one(
         comodel_name="product.product",
         string="Product")
-
-    uom_id = fields.Many2one(
-        comodel_name="uom.uom",
-        string="UOM")
-
-    quantity = fields.Float(
-        string="Quantity",
-        digits=dp.get_precision("Product Unit of Measure"))
-
-    price = fields.Float(
-        string="Price Unit",
-        digits=dp.get_precision("Product Price"))
-
-    uot_id = fields.Many2one(
-        comodel_name="uom.uom",
-        string="Tax UoM")
-
-    fiscal_type = fields.Selection(
-        selection=PRODUCT_FISCAL_TYPE,
-        string="Fiscal Type")
-
-    ncm_id = fields.Many2one(
-        comodel_name="l10n_br_fiscal.ncm",
-        index=True,
-        default=_get_default_ncm_id,
-        string="NCM")
-
-    cest_id = fields.Many2one(
-        comodel_name="l10n_br_fiscal.cest",
-        index=True,
-        string="CEST",
-        domain="[('ncm_ids', '=', ncm_id)]")
-
-    nbs_id = fields.Many2one(
-        comodel_name="l10n_br_fiscal.nbs",
-        index=True,
-        string="NBS")
 
     notes = fields.Text(
         string="Notes")
@@ -191,20 +144,3 @@ class DocumentLineAbstract(models.AbstractModel):
         string="Amount Total",
         compute="_compute_amount",
         default=0.00)
-
-    @api.onchange("uot_id", "uom_id", "price", "quantity")
-    def _onchange_commercial_quantity(self):
-        if not self.uot_id:
-            self.uot_id = self.uom_id
-
-        if self.uom_id == self.uot_id:
-            self.fiscal_price = self.price
-            self.fiscal_quantity = self.quantity
-
-        if self.uom_id != self.uot_id:
-            self.fiscal_price = self.price / self.product_id.uot_factor
-            self.fiscal_quantity = self.quantity * self.product_id.uot_factor
-
-    @api.onchange("ncm_id", "nbs_id", "cest_id")
-    def _onchange_ncm_id(self):
-        self._onchange_operation_id()

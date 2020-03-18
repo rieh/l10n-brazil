@@ -24,7 +24,9 @@ from . import tax_pis_cofins
 from . import tax_pis_cofins_base
 from . import tax_pis_cofins_credit
 from . import ncm_tax_pis_cofins
+from . import tax_ipi_control_seal
 from . import tax_ipi_guideline
+from . import tax_ipi_guideline_class
 from . import tax_estimate
 from . import tax_definition
 from . import tax_definition_company
@@ -33,6 +35,7 @@ from . import tax_definition_icms
 from . import tax_definition_operation_line
 from . import tax_definition_partner_profile
 from . import icms_regulation
+from . import icms_relief
 from . import document_type
 from . import document_serie
 from . import payment
