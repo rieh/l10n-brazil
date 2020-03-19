@@ -44,12 +44,14 @@
         <field name="document_electronic" invisible="1"/>
         <field name="operation_type" invisible="1"/>
         <header>
-            <button name="action_document_confirm" type="object" string="Confirmar"   groups="l10n_br_fiscal.group_user"    states="em_digitacao"     class="oe_highlight"/>
-            <button name="action_document_send"    type="object" string="Enviar"      groups="l10n_br_fiscal.group_user"    states="a_enviar,rejeitada"         class="oe_highlight"/>
-            <button name="view_pdf" type="object" string="Visualizar PDF" groups="l10n_br_fiscal.group_user" states="a_enviar,enviada,autorizada,rejeitada,cancelada" class="oe_highlight"/>
-            <button name="view_xml" type="object" string="Visualizar XML" groups="l10n_br_fiscal.group_user" states="a_enviar,enviada,autorizada,rejeitada,cancelada" class="oe_highlight"/>
+            <button name="action_document_confirm" type="object" string="Confirmar"   groups="l10n_br_fiscal.group_user"    states="em_digitacao"     class="btn-primary"/>
+            <button name="action_document_send"    type="object" string="Enviar"      groups="l10n_br_fiscal.group_user"    states="a_enviar,rejeitada"         class="btn-primary"/>
+            <button name="action_document_back2draft"    type="object" string="Voltar p/ Em Digitação"      groups="l10n_br_fiscal.group_user"    states="a_enviar,rejeitada" class="btn-secondary"/>
+            <button name="view_pdf" type="object" string="Visualizar PDF" groups="l10n_br_fiscal.group_user" states="a_enviar,enviada,autorizada,rejeitada,cancelada" class="btn-primary"/>
+            <button name="view_xml" type="object" string="Visualizar XML" groups="l10n_br_fiscal.group_user" states="a_enviar,enviada,autorizada,rejeitada,cancelada" class="btn-primary"/>
             <button name="action_document_cancel"  type="object" string="Cancelar"    groups="l10n_br_fiscal.group_user"    states="em_digitacao,a_enviar,enviada,rejeitada,autorizada"/>
             <button name="action_document_correction" type="object" string="Carta de correção" groups="l10n_br_fiscal.group_user" states="autorizada"/>
+            <button name="action_create_return" type="object" string="Devolver" groups="l10n_br_fiscal.group_user" states="autorizada"/>
 <!--                <button name="action_edoc_check" type="object"-->
 <!--                        string="Consultar no sefaz"-->
 <!--                        groups="base.group_no_one"/>-->
@@ -193,13 +195,41 @@
                     <field name="amount_ipi_base"/>
                     <field name="amount_ipi_value"/>
                   </group>
+                  <group string="ISSQN">
+                    <field name="amount_issqn_base"/>
+                    <field name="amount_issqn_value"/>
+                    <field name="amount_issqn_ret_base"/>
+                    <field name="amount_issqn_ret_value"/>
+                  </group>
                   <group string="PIS">
                     <field name="amount_pis_base"/>
                     <field name="amount_pis_value"/>
+                    <field name="amount_pis_ret_base"/>
+                    <field name="amount_pis_ret_value"/>
                   </group>
                   <group string="COFINS">
                     <field name="amount_cofins_base"/>
                     <field name="amount_cofins_value"/>
+                    <field name="amount_cofins_ret_base"/>
+                    <field name="amount_cofins_ret_value"/>
+                  </group>
+                  <group string="CSLL">
+                    <field name="amount_csll_base"/>
+                    <field name="amount_csll_value"/>
+                    <field name="amount_csll_ret_base"/>
+                    <field name="amount_csll_ret_value"/>
+                  </group>
+                  <group string="IRPJ">
+                    <field name="amount_irpj_base"/>
+                    <field name="amount_irpj_value"/>
+                    <field name="amount_irpj_ret_base"/>
+                    <field name="amount_irpj_ret_value"/>
+                  </group>
+                  <group string="INSS">
+                    <field name="amount_inss_base"/>
+                    <field name="amount_inss_value"/>
+                    <field name="amount_inss_wh_base"/>
+                    <field name="amount_inss_wh_value"/>
                   </group>
                 </group>
                 <group>

@@ -1,28 +1,28 @@
-# Copyright (C) 2019  Renato Lima - Akretion
+# Copyright (C) 2020  Luis Felipe Mileo - KMEE
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
-class TaxDefinitionOperationLine(models.Model):
+class TaxDefinitionPartnerProfile(models.Model):
     _inherit = "l10n_br_fiscal.tax.definition"
 
-    operation_line_id = fields.Many2one(
-        comodel_name="l10n_br_fiscal.operation.line",
-        string="Operation Line")
+    fiscal_profile_id = fields.Many2one(
+        comodel_name="l10n_br_fiscal.partner.profile",
+        string="Partner Profile")
 
     @api.multi
-    @api.constrains("operation_line_id")
-    def _check_operation_line_id(self):
+    @api.constrains("fiscal_profile_id")
+    def _check_fiscal_profile_id(self):
         for record in self:
-            if record.operation_line_id:
+            if record.fiscal_profile_id:
                 domain = [
                     ("id", "!=", record.id),
-                    ('operation_line_id', '=', record.operation_line_id.id),
+                    ('fiscal_profile_id', '=', record.fiscal_profile_id.id),
                     ('tax_group_id', '=', record.tax_group_id.id)]
 
                 if record.env["l10n_br_fiscal.tax.definition"].search_count(domain):
                     raise ValidationError(_(
                         "Tax Definition already exists "
-                        "for this Operation Line and Tax Group !"))
+                        "for this Partner Profile and Tax Group !"))
