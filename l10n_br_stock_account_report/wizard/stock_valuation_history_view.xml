@@ -26,5 +26,28 @@
             </field>
         </record>
 
+        <record id="view_stock_history_report_tree_inherit" model="ir.ui.view">
+            <field name="name">Stock Value At Date</field>
+            <field name="model">stock.history</field>
+            <field name="inherit_id" ref="stock_account.view_stock_history_report_tree"/>
+            <field name="arch" type="xml">
+                <field name="inventory_value" position="after">
+                    <field name="standard_price"/>
+                    <field name="lst_price"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_stock_history_report_search_inherit" model="ir.ui.view">
+            <field name="name">stock.history.report.search</field>
+            <field name="model">stock.history</field>
+            <field name="inherit_id" ref="stock_account.view_stock_history_report_search"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <filter name="company_id" string="Armazém"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

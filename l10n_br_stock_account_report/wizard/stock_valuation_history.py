@@ -4,6 +4,7 @@
 
 from openerp import models, api, _
 from openerp.osv import osv, fields
+from openerp.addons import decimal_precision as dp
 
 
 class WizardValuationHistory(models.TransientModel):
@@ -69,7 +70,22 @@ class StockHistory(osv.osv):
         'fiscal_classification_id': fields.related(
             'product_id', 'fiscal_classification_id', type='many2one',
             relation='account.product.fiscal.classification', string='NCM'
-        )
+        ),
+
+        'standard_price': fields.related(
+            'product_id', 'standard_price',
+            string='Cost Price', digits=dp.get_precision('Product Price'),
+        ),
+
+        'lst_price': fields.related(
+            'product_id', 'lst_price',
+            string='List Price',
+            digits_compute=dp.get_precision('Sale Price')
+        ),
+
+        # 'profitability': fields.float(
+        #     string='Profitability',
+        # ),
     }
 
     def read_group(self, cr, uid, domain, fields, groupby, offset=0,
@@ -78,8 +94,23 @@ class StockHistory(osv.osv):
             cr, uid, domain, fields, groupby, offset=offset, limit=limit,
             context=context, orderby=orderby, lazy=lazy)
 
+        product_obj = self.pool.get('product.product')
+
+        for line in res:
+            if line.get('product_id'):
+                product = product_obj.browse(cr, uid, line['product_id'][0])
+
+                standard_price = product.standard_price
+                lst_price = product.lst_price
+                inventory_value = product.qty_available * product.standard_price
+
+                line.update({
+                    'standard_price': standard_price,
+                    'lst_price': lst_price,
+                    'inventory_value': inventory_value,
+                })
+
         if 'fiscal_classification_id' in fields:
-            product_obj = self.pool.get('product.product')
             for line in res:
                 product = product_obj.browse(cr, uid, line['product_id'][0])
                 fiscal_class = product.fiscal_classification_id.code
