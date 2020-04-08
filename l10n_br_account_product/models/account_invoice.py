@@ -1710,8 +1710,7 @@ class AccountInvoiceLine(models.Model):
                 self.price_subtotal +
                 self.insurance_value +
                 self.freight_value +
-                self.other_costs_value -
-                self.discount_value
+                self.other_costs_value
             )
             amount_tax = 0.0
             for computed in taxes['taxes']:

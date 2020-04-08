@@ -150,11 +150,12 @@
                                 <page string="Totais" name="page_invoice_totals">
                                     <group string="Valores Principais">
                                         <group>
+                                            <field name="amount_gross" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="amount_discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                             <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                             <field name="amount_freight" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                             <field name="amount_insurance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                             <field name="amount_costs" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                            <field name="amount_discount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                             <field name="vr_operacao" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                         </group>
                                         <group>
@@ -494,9 +495,9 @@
                                     <field name="insurance_value"/>
                                     <field name="other_costs_value"/>
                                     <group string="Custos e Totais">
-                                        <field name="vr_custo_comercial"/>
-                                        <field name="vr_custo_estoque"/>
-                                        <field name="vr_operacao"/>
+<!--                                        <field name="vr_custo_comercial"/>-->
+<!--                                        <field name="vr_custo_estoque"/>-->
+<!--                                        <field name="vr_operacao"/>-->
                                         <field name="price_subtotal"/>
                                         <field name="price_total"/>
                                     </group>
