@@ -208,3 +208,6 @@ class AccountInvoice(models.Model):
                         tax_grouped[key]['amount'] += val['amount']
                         tax_grouped[key]['base'] += round_curr(val['base'])
         return tax_grouped
+
+    def action_move_create(self):
+        return True
