@@ -9,7 +9,8 @@ from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..constants.fiscal import (
-    DOCUMENT_ISSUER_PARTNER
+    DOCUMENT_ISSUER_PARTNER,
+    SITUACAO_EDOC_AUTORIZADA,
 )
 
 
@@ -119,6 +120,17 @@ class Document(models.Model):
     state = fields.Selection(
         related="state_edoc",
         string="State")
+
+    document_subsequent_ids = fields.One2many(
+        comodel_name='l10n_br_fiscal.subsequent.document',
+        inverse_name='source_document_id',
+    )
+
+    document_subsequent_generated = fields.Boolean(
+        string='Subsequent documents generated?',
+        compute='_compute_document_subsequent_generated',
+        default=False,
+    )
 
     @api.multi
     @api.onchange("operation_id")
@@ -301,8 +313,99 @@ class Document(models.Model):
         )
         self.document_comment()
 
+    def _exec_after_SITUACAO_EDOC_AUTORIZADA(self, old_state, new_state):
+        super(Document, self)._exec_after_SITUACAO_EDOC_AUTORIZADA(
+            old_state, new_state
+        )
+        self._generates_subsequent_operations()
+
     @api.onchange("operation_id")
     def _onchange_operation_id(self):
         super(Document, self)._onchange_operation_id()
         for comment_id in self.operation_id.comment_ids:
             self.comment_ids += comment_id
+
+    def _prepare_referenced_subsequent(self):
+        vals = {
+                'fiscal_document_id': self.id,
+                'partner_id': self.partner_id.id,
+                'document_type_id': self.document_type,
+                'serie': self.document_serie,
+                'number': self.number,
+                'date': self.date,
+                'document_key': self.key,
+                # 'numero_ecf': self.ecf,
+                # 'numero_coo': self.coo,
+            }
+        reference_id = self.env['l10n_br_fiscal.document.related'].create(vals)
+        return reference_id
+
+    def _document_reference(self, reference_ids):
+        for referenced_item in reference_ids:
+            referenced_item.fiscal_document_related_ids = self.id
+            self.fiscal_document_related_ids |= referenced_item
+
+    @api.onchange('operation_id')
+    def _onchange_operation_id(self):
+        subsequent_documents = []
+        for subsequent_id in self.operation_id.mapped(
+                'operation_subsequent_ids'):
+            subsequent_documents.append([6, 0, {
+                'source_document_id': self.id,
+                'subsequent_operation_id': subsequent_id.id,
+                'operation_id':
+                    subsequent_id.subsequent_operation_id.id,
+            }])
+        self.sudo().write({'document_subsequent_ids': subsequent_documents})
+
+    @api.depends('document_subsequent_ids.subsequent_document_id')
+    def _compute_document_subsequent_generated(self):
+        for document in self:
+            if not document.document_subsequent_ids:
+                continue
+            document.document_subsequent_generated = all(
+                subsequent_id.operation_performed
+                for subsequent_id in document.document_subsequent_ids
+            )
+
+    def _generates_subsequent_operations(self):
+        """
+        Operaçoes subsequentes:
+            - NOTA FISCAL emitida em operaçao triangular;
+                - Simples faturamento 5922;
+                - Encomenda de entrega futura: 5117
+            - NOTA FISCAL MULTI EMPRESAS ;
+                - Saida;
+                - Entrada;
+            - Consiguinaçao:
+                - Remessa de consiguinaçao;
+                - Venda de itens;
+                - Retorno de consiguinaçao;
+            - Venda ambulante:
+                - Remessa fora de estabelecimento;
+                - Itens vendidos fora do estabelecimento;
+                - Retorno de venda fora do estabelecimento;
+            Caso o tipo da nota seja diferente devemos inverter os participantes;
+        :return:
+        """
+        for record in self.filtered(lambda doc:
+                                    not doc.document_subsequent_generated):
+            for subsequent_id in record.document_subsequent_ids.filtered(
+                    lambda doc_sub: doc_sub._confirms_document_generation()):
+                subsequent_id.generate_subsequent_document()
+                #
+                # Transmite o documento
+                #
+
+                # documento.envia_documento()
+
+        # TODO: Retornar usuário para os documentos criados
+
+    def cancel_edoc(self):
+        self.ensure_one()
+        if any(doc.state_edoc == SITUACAO_EDOC_AUTORIZADA
+               for doc in self.document_subsequent_ids.mapped(
+                'document_subsequent_ids')):
+            message = _("Canceling the document is not allowed: one or more "
+                        "associated documents have already been authorized.")
+            raise UserWarning(message)
