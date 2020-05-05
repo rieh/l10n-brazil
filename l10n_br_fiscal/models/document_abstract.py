@@ -506,15 +506,23 @@ class DocumentAbstract(models.AbstractModel):
         if self.operation_id:
             self.operation_name = self.operation_id.name
 
-    @api.onchange("payment_term_id")
+    @api.onchange("payment_term_id", "company_id", "currency_id",
+                  "amount_missing_payment_value", "date")
     def _onchange_payment_term_id(self):
-        if self.payment_term_id:
-            self.fiscal_payment_ids = [(0, False, {
-                'amount': self.amount_total,
-                'payment_term_id': self.payment_term_id.od,
-                'company_id': self.company_id.id,
+        if (self.payment_term_id and
+                self.company_id and
+                self.currency_id and
+                self.amount_missing_payment_value and self.date):
+
+            self.fiscal_payment_ids.unlink()
+            self.fiscal_payment_ids = self.fiscal_payment_ids.create({
+                'payment_term_id': self.payment_term_id.id,
+                'amount': self.amount_missing_payment_value,
+                'date': self.date,
                 'currency_id': self.currency_id.id,
-            })]
+                'company_id': self.company_id.id,
+                'document_id': self._origin.id,
+            })
 
         for payment in self.fiscal_payment_ids:
             payment._onchange_payment_term_id()
