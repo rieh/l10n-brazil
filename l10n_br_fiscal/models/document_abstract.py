@@ -470,9 +470,9 @@ class DocumentAbstract(models.AbstractModel):
             values['number'] = self._create_serie_number(
                 values.get('document_serie_id'), values['date'])
 
-        if values.get('financial_ids') and values.get('fiscal_payment_ids'):
-            values['fiscal_payment_ids'][0][2]['line_ids'] = \
-                values.pop('financial_ids')
+        # if values.get('financial_ids') and values.get('fiscal_payment_ids'):
+        #     values['fiscal_payment_ids'][0][2]['line_ids'] = \
+        #         values.pop('financial_ids')
 
         return super(DocumentAbstract, self).create(values)
 
@@ -510,47 +510,62 @@ class DocumentAbstract(models.AbstractModel):
         if self.operation_id:
             self.operation_name = self.operation_id.name
 
-    @api.onchange("payment_term_id", "company_id", "currency_id",
-                  "amount_missing_payment_value", "date")
-    def _onchange_payment_term_id(self):
-        if self.payment_term_id and self.company_id and self.currency_id and not self.fiscal_payment_ids:
-            # vfiscal_payment_id = self.fiscal_payment_ids.new()
-            # vfiscal_payment_id._onchange_payment_term_id()
+    def generate_financial(self):
+        for record in self:
+            if record.payment_term_id and self.company_id and self.currency_id:
+                record.financial_ids.unlink()
+                record.fiscal_payment_ids.unlink()
 
-            # fiscal_payment_vals = vfiscal_payment_id._convert_to_cache(
-            #     vfiscal_payment_id._cache)
-            # fiscal_payment_vals.update(vfiscal_payment_id._compute_payment_vals())
+                vals = {
+                    'payment_term_id': self.payment_term_id.id,
+                    'amount': self.amount_missing_payment_value,
+                    'currency_id': self.currency_id.id,
+                    'company_id': self.company_id.id,
+                }
+                vals.update(self.fiscal_payment_ids._compute_payment_vals(
+                    payment_term_id=self.payment_term_id,
+                    currency_id=self.currency_id,
+                    company_id=self.company_id,
+                    amount=self.amount_missing_payment_value, date=self.date)
+                )
+                self.fiscal_payment_ids = self.fiscal_payment_ids.new(vals)
+                for line in self.fiscal_payment_ids.mapped('line_ids'):
+                    line.document_id = self
 
-            vals = {
-                'payment_term_id': self.payment_term_id.id,
-                'amount': self.amount_missing_payment_value,
-                'currency_id': self.currency_id.id,
-                'company_id': self.company_id.id,
-             }
-            vals.update(self.fiscal_payment_ids._compute_payment_vals(
-                payment_term_id=self.payment_term_id, currency_id=self.currency_id,
-                company_id=self.company_id,
-                amount=self.amount_missing_payment_value, date=self.date)
-            )
-            self.fiscal_payment_ids |= self.fiscal_payment_ids.new(vals)
-            for line in self.fiscal_payment_ids.mapped('line_ids'):
-                line.document_id = self
-            #
-            #
-            # self.update({
-            #     'fiscal_payment_ids': [
-            #         (6, 0, {}),
-            #         (0, 0,vals)
-            #     ]
-            # })
+            elif record.fiscal_payment_ids:
+                record.financial_ids.unlink()
+                record.fiscal_payment_ids.unlink()
 
-    # @api.onchange("fiscal_payment_ids", "payment_term_id")
-    # def _onchange_fiscal_payment_ids(self):
-    #     financial_ids = []
-    #     for payment in self.fiscal_payment_ids:
-    #         for line in payment.line_ids:
-    #             financial_ids.append(line.id)
-    #     self.financial_ids = [(6, 0, financial_ids)]
+    @api.onchange("fiscal_payment_ids", "payment_term_id")
+    def _onchange_fiscal_payment_ids(self):
+        financial_ids = []
+        for payment in self.fiscal_payment_ids:
+            for line in payment.line_ids:
+                financial_ids.append(line.id)
+        self.financial_ids = [(6, 0, financial_ids)]
+
+    # @api.onchange("payment_term_id", "company_id", "currency_id",
+    #               "amount_missing_payment_value", "date")
+    # def _onchange_payment_term_id(self):
+    #     if (self.payment_term_id and self.company_id and
+    #             self.currency_id):
+    #
+    #         self.financial_ids.unlink()
+    #
+    #         vals = {
+    #             'payment_term_id': self.payment_term_id.id,
+    #             'amount': self.amount_missing_payment_value,
+    #             'currency_id': self.currency_id.id,
+    #             'company_id': self.company_id.id,
+    #          }
+    #         vals.update(self.fiscal_payment_ids._compute_payment_vals(
+    #             payment_term_id=self.payment_term_id, currency_id=self.currency_id,
+    #             company_id=self.company_id,
+    #             amount=self.amount_missing_payment_value, date=self.date)
+    #         )
+    #         self.fiscal_payment_ids = self.fiscal_payment_ids.new(vals)
+    #         for line in self.fiscal_payment_ids.mapped('line_ids'):
+    #             line.document_id = self
 
     @api.depends("amount_total", "fiscal_payment_ids")
     def _compute_payment_change_value(self):
