@@ -70,6 +70,12 @@ class NFe(spec_models.StackedModel):
     nfe40_det = fields.One2many(related='line_ids',
                                 comodel_name='l10n_br_fiscal.document.line',
                                 inverse_name='document_id')
+    nfe40_detPag = fields.One2many(related='fiscal_payment_ids',
+                                   comodel_name='l10n_br_fiscal.payment',
+                                   inverse_name='document_id')
+    nfe40_dup = fields.One2many(related='financial_ids',
+                                comodel_name='l10n_br_fiscal.payment.line',
+                                inverse_name='document_id')
 
     nfe40_dhEmi = fields.Datetime(
         related='date'
@@ -138,6 +144,12 @@ class NFe(spec_models.StackedModel):
     nfe40_CRT = fields.Selection(
         related='company_tax_framework'
     )
+
+    nfe40_nFat = fields.Char(related='number')
+    nfe40_vOrig = fields.Monetary(
+        compute=lambda self: self.amount_total - self.amount_discount)
+    nfe40_vDesc = fields.Monetary(related='amount_discount')
+    nfe40_vLiq = fields.Monetary(related='amount_total')
 
     partner_ind_ie_dest = fields.Selection(
         selection=NFE_IND_IE_DEST,
@@ -569,6 +581,12 @@ class NFe(spec_models.StackedModel):
                     return self.partner_phone.replace('(', '').replace(
                         ')', '').replace(' ', '').replace(
                         '-', '').replace('+', '')
+
+        if xsd_field == 'nfe40_cobr':
+            if not any(f in ['14', '15', '99']
+                       for f in self.fiscal_payment_ids.mapped(
+                            'forma_pagamento')):
+                return False
 
         return super(NFe, self)._export_field(
             xsd_field, class_obj, member_spec)

@@ -7,3 +7,5 @@ from . import res_city
 from . import res_country_state
 from . import res_config_settings
 from . import cfop
+from . import payment
+from . import payment_line
