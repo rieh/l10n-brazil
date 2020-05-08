@@ -846,6 +846,10 @@ class Document(models.Model):
     @api.onchange('fiscal_operation_id')
     def _onchange_fiscal_operation_id(self):
         super()._onchange_fiscal_operation_id()
+
+        if self.fiscal_operation_id:
+            self.ind_final = self.fiscal_operation_id.ind_final
+
         if self.issuer == DOCUMENT_ISSUER_COMPANY:
             self.document_type_id = self.company_id.document_type_id
 
