@@ -220,6 +220,8 @@ class SaleOrder(models.Model):
         self.ensure_one()
         result = super(SaleOrder, self)._prepare_invoice()
 
+        result['ind_pres'] = self.ind_pres
+
         if self.operation_id:
             result['operation_id'] = self.operation_id.id
             result['fiscal_document_id'] = False
