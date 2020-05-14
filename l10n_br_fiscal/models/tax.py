@@ -24,6 +24,7 @@ from ..constants.icms import (
     ICMS_BASE_TYPE_DEFAULT,
     ICMS_ST_BASE_TYPE,
     ICMS_ST_BASE_TYPE_DEFAULT,
+    ICMS_ST_CST_CODES,
     ICMS_SN_CST_WITH_CREDIT,
     ICMS_DIFAL_PARTITION,
     ICMS_DIFAL_UNIQUE_BASE,
@@ -334,6 +335,13 @@ class Tax(models.Model):
 
         taxes_dict[tax.tax_domain].update({
             'icms_base_type': tax.icms_base_type})
+
+        if taxes_dict[tax.tax_domain]['cst_id'].code in ICMS_ST_CST_CODES:
+            taxes_dict[tax.tax_domain].update({
+                'base': 0.0,
+                'percent_amount': 0.0,
+                'tax_value': 0.0,
+            })
 
         # DIFAL
         if (company.state_id != partner.state_id
