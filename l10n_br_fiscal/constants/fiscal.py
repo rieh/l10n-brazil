@@ -297,6 +297,8 @@ CFOP_TYPE_MOVE = [
     ("other", "Other"),
 ]
 
+CFOP_TYPE_MOVE_SALE_INDUSTRY = "sale_industry"
+
 CFOP_TYPE_MOVE_DEFAULT = "other"
 
 MODELO_FISCAL_NFE = "55"

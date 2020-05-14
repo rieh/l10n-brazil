@@ -1,17 +1,25 @@
-# Copyright (C) 2013  Renato Lima - Akretion
+# Copyright 2019 KMEE INFORMATICA LTDA
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
-from odoo import fields, models
-
+from odoo import fields
+from odoo.addons.spec_driven_model.models import spec_models
 from ..constants.nfe import (NFE_ENVIRONMENT_DEFAULT, NFE_ENVIRONMENTS,
                              NFE_VERSION_DEFAULT, NFE_VERSIONS)
 
+PROCESSADOR_ERPBRASIL_EDOC = 'erpbrasil_edoc'
+PROCESSADOR = [(PROCESSADOR_ERPBRASIL_EDOC, 'erpbrasil.edoc')]
 
-class ResCompany(models.Model):
-    _inherit = "res.company"
+
+class ResCompany(spec_models.SpecModel):
+    _inherit = 'res.company'
+
+    processador_edoc = fields.Selection(
+        selection_add=PROCESSADOR,
+    )
 
     nfe_version = fields.Selection(
-        selection=NFE_VERSIONS, string="NFe Version", default=NFE_VERSION_DEFAULT
+        selection=NFE_VERSIONS, string="NFe Version",
+        default=NFE_VERSION_DEFAULT,
     )
 
     nfe_environment = fields.Selection(
@@ -21,5 +29,6 @@ class ResCompany(models.Model):
     )
 
     nfe_default_serie_id = fields.Many2one(
-        comodel_name="l10n_br_fiscal.document.serie", string="NF-e Default Serie"
+        comodel_name="l10n_br_fiscal.document.serie",
+        string="NF-e Default Serie",
     )
