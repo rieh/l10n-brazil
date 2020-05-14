@@ -808,5 +808,5 @@ class TestFiscalDocumentGeneric(TransactionCase):
     def test_financial_confirm(self):
         """ Test financial """
         self.demo_nfe_financial.action_document_confirm()
-        with self.assertRaise(orm_exception):
+        with self.assertRaises(except_orm):
             self.demo_nfe_raise_financial.action_document_confirm()

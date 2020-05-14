@@ -61,3 +61,6 @@ class AccountInvoice(models.Model):
         ondelete="restrict",  # or cascade?
         default=lambda self: self.env.ref(
             "l10n_br_fiscal.fiscal_document_dummy"))
+
+    def action_move_create(self):
+        return True
