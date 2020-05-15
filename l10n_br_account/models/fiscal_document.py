@@ -70,6 +70,12 @@ class FiscalDocument(models.Model):
         comodel_name='account.payment.term',
     )
 
+    @api.onchange("operation_id")
+    def _onchange_operation_id(self):
+        super(FiscalDocument, self)._onchange_operation_id()
+        if self.operation_id.journal_id:
+            self.journal_id = self.operation_id.journal_id
+
     def _generate_financial_account_moves(self, move_lines):
         self.financial_ids.generate_move(move_lines)
 
