@@ -168,6 +168,15 @@ class SaleOrder(models.Model):
 
     document_count = fields.Integer(related='invoice_count', readonly=True)
 
+    ind_final = fields.Selection(
+        selection=[
+            ('0', 'Não'),
+            ('1', 'Sim')
+        ],
+        string='Operação com consumidor final',
+        default='1',
+    )
+
     @api.onchange('discount_rate')
     def onchange_discount_rate(self):
         for sale_order in self:
@@ -221,6 +230,7 @@ class SaleOrder(models.Model):
         result = super(SaleOrder, self)._prepare_invoice()
 
         result['ind_pres'] = self.ind_pres
+        result['ind_final'] = self.ind_final
 
         if self.operation_id:
             result['operation_id'] = self.operation_id.id
