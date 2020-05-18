@@ -79,6 +79,10 @@ class FiscalDocument(models.Model):
     def _generate_financial_account_moves(self, move_lines):
         self.financial_ids.generate_move(move_lines)
 
+    def action_document_confirm(self):
+        super(FiscalDocument, self).action_document_confirm()
+        self.action_move_create()
+
     @api.multi
     def action_move_create(self):
         for record in self:
