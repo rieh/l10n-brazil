@@ -70,6 +70,7 @@ class DocumentLine(models.Model):
 
     fiscal_operation_id = fields.Many2one(
         domain=lambda self: self._operation_domain(),
+        readonly=True,
     )
 
     document_id = fields.Many2one(
