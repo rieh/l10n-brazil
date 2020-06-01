@@ -311,7 +311,7 @@ class Tax(models.Model):
         tax_dict_ipi = taxes_dict.get("ipi", {})
 
         if partner.ind_ie_dest in (NFE_IND_IE_DEST_2, NFE_IND_IE_DEST_9) or \
-                (operation_line.operation_id.ind_final ==
+                (operation_line.fiscal_operation_id.ind_final ==
                  NFE_IND_FINAL_DEFAULT):
             # Add IPI in ICMS Base
             add_to_base.append(tax_dict_ipi.get("tax_value", 0.00))
