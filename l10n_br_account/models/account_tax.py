@@ -95,7 +95,8 @@ class AccountTax(models.Model):
                     account_tax.get('id')))
 
             if fiscal_tax:
-                if not fiscal_tax.get('tax_include'):
+                if not fiscal_tax.get('tax_include') and \
+                        self.browse(account_tax.get('id')).price_include:
                     taxes_results['total_included'] += fiscal_tax.get(
                         'tax_value')
 
@@ -106,5 +107,11 @@ class AccountTax(models.Model):
                     'base': fiscal_tax.get('base'),
                     'tax_include': fiscal_tax.get('tax_include')
                 })
+
+        taxes_results['total_excluded'] = \
+            taxes_results['total_included'] - sum(
+                t.get('amount', 0.0)
+                for t in taxes_results.get('taxes', [])
+                if not t.get('tax_include'))
 
         return taxes_results
