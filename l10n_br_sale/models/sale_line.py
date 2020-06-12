@@ -113,13 +113,6 @@ class SaleOrderLine(models.Model):
                         result["cfop_id"] = cfop.id
         return result
 
-    @api.onchange('product_uom', 'product_uom_qty', 'price_unit')
-    def _onchange_product_uom(self):
-        """To call the method in the mixin to update
-        the price and fiscal quantity."""
-        super(SaleOrderLine, self).product_uom_change()
-        self._onchange_commercial_quantity()
-
     @api.onchange('discount_value', 'discount')
     def _onchange_discount_value(self):
         """Update discount percent"""

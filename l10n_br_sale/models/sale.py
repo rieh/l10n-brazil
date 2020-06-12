@@ -365,6 +365,7 @@ class SaleOrder(models.Model):
                 })
                 line.fiscal_document_line_id._onchange_operation_line_id()
                 line.fiscal_document_line_id._onchange_product_id()
+                line.fiscal_document_line_id.price_unit = line.price_unit
                 line.fiscal_document_line_id._onchange_commercial_quantity()
             invoice.fiscal_document_id.generate_financial()
 
