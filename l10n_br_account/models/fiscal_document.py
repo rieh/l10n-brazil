@@ -1,4 +1,5 @@
 # Copyright (C) 2020 - TODAY Luis Felipe Mileo - KMEE
+# Copyright (C) 2020 - TODAY Renato Lima - Akretion
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
 from odoo import _, api, models
@@ -10,7 +11,7 @@ from odoo.addons.l10n_br_fiscal.constants.fiscal import (
 
 
 class FiscalDocument(models.Model):
-    _inherit = "l10n_br_fiscal.document"
+    _inherit = 'l10n_br_fiscal.document'
 
     @api.depends('line_ids')
     def _compute_move_template_ids(self):
