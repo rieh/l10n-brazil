@@ -10,5 +10,9 @@ class AccountJournal(models.Model):
     revenue_expense = fields.Boolean(
         string='Gera Financeiro',
     )
-    generate_moves = fields.Boolean(string="Generate Moves Automatically")
-    post_account_moves = fields.Boolean(string="Post Moves Automatically")
+    generate_moves = fields.Boolean(
+	string="Generate Moves Automatically"
+    )
+    post_account_moves = fields.Boolean(
+	string="Post Moves Automatically"
+    )
