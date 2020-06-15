@@ -10,6 +10,7 @@ class FiscalTax(models.Model):
     @api.multi
     def account_taxes(self, user_type='sale'):
         account_taxes = self.env['account.tax']
+        self._create_account_tax()
         for fiscal_tax in self:
             taxes = fiscal_tax._account_taxes()
             account_taxes |= taxes.filtered(
@@ -42,6 +43,7 @@ class FiscalTax(models.Model):
                         'type_tax_use': tax_use,
                         'fiscal_tax_ids': [(4, fiscal_tax.id)],
                         'tax_group_id': fiscal_tax.account_tax_group().id,
+                        'price_include': fiscal_tax.tax_group_id.tax_include,
                         'amount': 0.00
                     }
 

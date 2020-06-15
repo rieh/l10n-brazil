@@ -80,6 +80,8 @@ class SaleOrderLine(models.Model):
                 t.get('amount', 0.0)
                 for t in taxes.get('taxes', []) if not t.get('tax_include'))
 
+            line.write({'tax_id': [(6, 0, line.tax_id.ids)]})
+
             line.update({
                 'amount_tax_not_included': tax_not_included,
                 'price_tax': tax_not_included,
