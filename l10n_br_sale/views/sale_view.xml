@@ -56,7 +56,9 @@
             </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='analytic_tag_ids']" position="replace"/>
             <xpath expr="//field[@name='order_line']/tree/field[@name='discount']" position="replace"/>
-            <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="replace"/>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="replace">
+                <field name="tax_id" widget="many2many_tags" invisible="1"/>
+            </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
                 <field name="discount" groups="sale.group_discount_per_so_line"/>
                 <field name="discount_value" groups="l10n_br_sale.group_discount_per_value"/>
@@ -65,8 +67,8 @@
             <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
                 <field name="price_total" invisible="1"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/form//field[@name='tax_id']" position="attributes">
-                <attribute name="invisible">1</attribute>
+            <xpath expr="//field[@name='order_line']/form//field[@name='tax_id']" position="replace">
+                <field name="tax_id" widget="many2many_tags" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='order_line']/form/div[@groups='base.group_no_one' and field/@name='invoice_lines']" position="replace"/>
             <xpath expr="//field[@name='order_line']/form//field[@name='tax_id']" position="after">

@@ -8,6 +8,8 @@ from odoo import _, api, fields, models
 from odoo.addons import decimal_precision as dp
 from odoo.exceptions import UserError
 from odoo.tools import float_is_zero
+from odoo.tools.misc import formatLang
+from functools import partial
 
 
 class SaleOrder(models.Model):
@@ -384,3 +386,46 @@ class SaleOrder(models.Model):
 
         self._finalize_invoices(invoices, references)
         return [inv.id for inv in invoices.values()]
+
+    def _amount_by_group(self):
+        for order in self:
+            currency = order.currency_id or order.company_id.currency_id
+            fmt = partial(formatLang, self.with_context(
+                lang=order.partner_id.lang).env, currency_obj=currency)
+            res = {}
+            for line in order.order_line:
+                taxes = line.tax_id.compute_all(
+                    price_unit=line._calc_line_base_price(),
+                    currency=line.order_id.currency_id,
+                    quantity=line._calc_line_quantity(),
+                    product=line.product_id,
+                    partner=line.order_id.partner_id,
+                    fiscal_taxes=line.fiscal_tax_ids,
+                    operation_line=line.operation_line_id,
+                    ncm=line.ncm_id,
+                    nbm=line.nbm_id,
+                    cest=line.cest_id,
+                    discount_value=line.discount_value,
+                    insurance_value=line.insurance_value,
+                    other_costs_value=line.other_costs_value,
+                    freight_value=line.freight_value,
+                    fiscal_price=line.fiscal_price,
+                    fiscal_quantity=line.fiscal_quantity,
+                    uot=line.uot_id,
+                    icmssn_range=line.icmssn_range_id)['taxes']
+                for tax in line.tax_id:
+                    group = tax.tax_group_id
+                    if group.fiscal_tax_group_id.tax_include:
+                        continue
+                    res.setdefault(group, {'amount': 0.0, 'base': 0.0})
+                    for t in taxes:
+                        if t['id'] == tax.id or t['id'] in \
+                                tax.children_tax_ids.ids:
+                            res[group]['amount'] += t['amount']
+                            res[group]['base'] += t['base']
+            res = sorted(res.items(), key=lambda l: l[0].sequence)
+            order.amount_by_group = [(
+                l[0].name, l[1]['amount'], l[1]['base'],
+                fmt(l[1]['amount']), fmt(l[1]['base']),
+                len(res),
+            ) for l in res]
