@@ -29,6 +29,7 @@
 
         "views/l10n_br_account_menu.xml",
         # Views
+        "views/account_journal_view.xml",
         "views/account_tax_view.xml",
         "views/account_tax_template_view.xml",
         "views/fiscal_tax_group_view.xml",

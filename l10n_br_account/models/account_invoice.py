@@ -23,7 +23,11 @@ FISCAL_TYPE_REFUND = {
     'in': ['sale_return', 'out_return'],
 }
 
-SHADOWED_FIELDS = ['partner_id', 'company_id', 'date', 'currency_id']
+SHADOWED_FIELDS = [
+    'partner_id', 'company_id', 'date', 'currency_id',
+    'payment_term_id', 'financial_ids', 'fiscal_payment_ids',
+    'journal_id', 'account_id',
+]
 
 
 class AccountInvoice(models.Model):
@@ -214,3 +218,17 @@ class AccountInvoice(models.Model):
         if self.fiscal_document_id != dummy_doc:
             return True
         return super(AccountInvoice, self).action_move_create()
+    def action_invoice_open(self):
+        for record in self:
+            record.fiscal_document_id.action_document_confirm()
+            record.fiscal_document_id.action_document_send()
+            if record.fiscal_document_id.move_id:
+                record.move_id = record.fiscal_document_id.move_id
+        return super().action_invoice_open()
+
+    @api.multi
+    def _get_computed_reference(self):
+        res = super()._get_computed_reference()
+        if self.company_id.invoice_reference_type == 'fiscal_document':
+            return self.fiscal_document_id.number  # FIXME: Name!
+        return res

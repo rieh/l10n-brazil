@@ -11,8 +11,11 @@ class AccountJournal(models.Model):
         string='Gera Financeiro',
     )
     generate_moves = fields.Boolean(
-	string="Generate Moves Automatically"
+        string='Generate Moves Automatically',
+        default=True,
     )
     post_account_moves = fields.Boolean(
-	string="Post Moves Automatically"
+        string='Post Moves Automatically',
+        default=True,
     )
+
