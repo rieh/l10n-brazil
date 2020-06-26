@@ -2,7 +2,7 @@
 # Copyright (C) 2020 - TODAY Renato Lima - Akretion
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
-from odoo import _, api, models
+from odoo import _, api, models, fields
 from odoo.exceptions import UserError
 
 from odoo.addons.l10n_br_fiscal.constants.fiscal import (
@@ -17,6 +17,11 @@ class FiscalDocument(models.Model):
     def _compute_move_template_ids(self):
         for record in self:
             record.move_template_ids = record.line_ids.mapped('move_template_id')
+
+    invoice_id = fields.Many2one(
+        comodel_name='account.invoice',
+        readonly=True
+    )
 
     account_id = fields.Many2one(
         comodel_name="account.account",

@@ -32,9 +32,14 @@ SHADOWED_FIELDS = [
 
 class AccountInvoice(models.Model):
     _name = 'account.invoice'
-    _inherit = 'account.invoice'
+    _inherit = ['account.invoice', 'l10n_br_fiscal.payment.mixin']
     _inherits = {'l10n_br_fiscal.document': 'fiscal_document_id'}
     _order = 'date_invoice DESC, number DESC'
+    _payment_inverse_name = 'invoice_id'
+
+    @api.depends("amount_total", "fiscal_payment_ids")
+    def _compute_payment_change_value(self):
+        self._abstract_compute_payment_change_value()
 
     # initial account.invoice inherits on fiscal.document that are
     # disable with active=False in their fiscal_document table.
@@ -71,6 +76,20 @@ class AccountInvoice(models.Model):
         ondelete="cascade",
         default=lambda self: self.env.ref(
             "l10n_br_fiscal.fiscal_document_dummy"),
+    )
+
+    financial_ids = fields.One2many(
+        comodel_name='l10n_br_fiscal.payment.line',
+        inverse_name=_payment_inverse_name,
+        string='Duplicatas',
+        copy=True,
+    )
+
+    fiscal_payment_ids = fields.One2many(
+        comodel_name='l10n_br_fiscal.payment',
+        inverse_name=_payment_inverse_name,
+        string='Pagamentos',
+        copy=True,
     )
 
     @api.model
