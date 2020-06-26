@@ -852,11 +852,11 @@ class FiscalDocumentLineMixin(models.AbstractModel):
         default=0.00)
 
     simple_value = fields.Monetary(
-        string="National Simple Value",
+        string="National Simple Taxes",
         default=0.00)
 
     simple_without_icms_value = fields.Monetary(
-        string="National Simple without ICMS Value",
+        string="National Simple Taxes without ICMS",
         default=0.00)
 
     comment_ids = fields.Many2many(
