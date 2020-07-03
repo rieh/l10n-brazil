@@ -77,3 +77,4 @@ from . import payment_line
 from . import payment
 from . import payment_mode
 from . import payment_condition
+from . import city_taxation_code

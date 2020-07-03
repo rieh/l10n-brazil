@@ -102,6 +102,7 @@
         'views/payment_term_view.xml',
         'views/payment_mode_view.xml',
         'views/payment_condition_view.xml',
+        "views/city_taxation_code.xml",
     ],
     "demo": [
         # Some demo data is being loaded via post_init_hook in hook file
