@@ -22,6 +22,9 @@
                     </tree>
                 </field>
             </field>
+            <field name="city" position="replace">
+                <field name="city_id" placeholder="City" class="o_address_city"/>
+            </field>
         </field>
     </record>
 
