@@ -127,6 +127,8 @@ class AccountInvoice(models.Model):
             if invoice.fiscal_document_id != dummy_doc:
                 shadowed_fiscal_vals = invoice._prepare_shadowed_fields_dict()
                 invoice.fiscal_document_id.write(shadowed_fiscal_vals)
+                invoice.fiscal_document_id._onchange_company_id()
+                invoice.fiscal_document_id._onchange_partner_id()
         return result
 
     @api.one
