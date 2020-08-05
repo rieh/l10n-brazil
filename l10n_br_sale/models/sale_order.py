@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Renato Lima - Akretion
+,# Copyright (C) 2009  Renato Lima - Akretion
 # Copyright (C) 2012  Raphaël Valyi - Akretion
 # License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
 
@@ -235,6 +235,10 @@ class SaleOrder(models.Model):
                 self.company_id, self.fiscal_operation_id)
             if document_serie:
                 result['document_serie_id'] = document_serie.id
+            if document_type.code == '55':
+                result['document_section'] = 'nfe'
+            elif document_type.code == 'SE':
+                result['document_section'] = 'nfse_recibos'
 
         if self.fiscal_operation_id:
             if self.fiscal_operation_id.journal_id:
