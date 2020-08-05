@@ -236,6 +236,11 @@ class SaleOrder(models.Model):
             document_type = self.company_id.document_type_id
             document_type_id = self.company_id.document_type_id.id
 
+        if document_type.code == '55':
+            result['document_section'] = 'nfe'
+        elif document_type.code == 'SE':
+            result['document_section'] = 'nfse_recibos'
+
         result['document_type_id'] = document_type_id
         document_serie = document_type.get_document_serie(
             self.company_id, self.fiscal_operation_id)
