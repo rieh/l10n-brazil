@@ -115,6 +115,8 @@ class AccountInvoice(models.Model):
             shadowed_fiscal_vals = invoice._prepare_shadowed_fields_dict()
             shadowed_fiscal_vals['invoice_id'] = invoice.id
             invoice.fiscal_document_id.write(shadowed_fiscal_vals)
+            invoice.fiscal_document_id._onchange_company_id()
+            invoice.fiscal_document_id._onchange_partner_id()
         return invoice
 
     @api.multi

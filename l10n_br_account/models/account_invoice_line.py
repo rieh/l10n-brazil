@@ -139,6 +139,7 @@ class AccountInvoiceLine(models.Model):
             doc_id = line.invoice_id.fiscal_document_id.id
             shadowed_fiscal_vals['document_id'] = doc_id
             line.fiscal_document_line_id.write(shadowed_fiscal_vals)
+            line.fiscal_document_line_id._onchange_product_id_fiscal()
         return line
 
     @api.multi
