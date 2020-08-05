@@ -83,6 +83,35 @@ class Document(models.Model):
         default=lambda self: self.env.user.company_id.nfse_environment,
     )
 
+    def document_number(self):
+        for nfe in self:
+            if nfe.rps_number:
+                continue
+            super(Document, nfe).document_number()
+
+    def _gerar_evento(self, arquivo_xml, event_type):
+        old_value = self.number
+        if not self.number and self.rps_number:
+            self.number = self.rps_number
+        event_id = super()._gerar_evento(arquivo_xml, event_type)
+        self.number = old_value
+        return event_id
+
+    @api.multi
+    def write(self, vals):
+        if vals.get('company_id'):
+            company_obj = self.env['res.company']
+            company = company_obj.browse(vals['company_id'])
+            if company.provedor_nfse:
+                if vals.get('document_serie_id', self.document_serie_id) and \
+                        not vals.get('rps_number', self.rps_number):
+                    serie_id = self.document_serie_id.browse(
+                        vals.get('document_serie_id',
+                                 self.document_serie_id.id))
+                    vals['rps_number'] = serie_id.next_seq_number()
+                vals['number'] = None
+        return super().write(vals)
+
     @api.model
     def create(self, values):
         if not values.get('date'):
@@ -263,15 +292,16 @@ class Document(models.Model):
                     vals['edoc_error_message'] = mensagem_completa
 
                 if processo.resposta.ListaNfse:
-                    xml_file = processador._generateds_to_string_etree(
-                        processo.resposta)[0]
-                    record.autorizacao_event_id.set_done(xml_file)
                     for comp in processo.resposta.ListaNfse.CompNfse:
                         vals['number'] = comp.Nfse.InfNfse.Numero
                         vals['data_hora_autorizacao'] = \
                             comp.Nfse.InfNfse.DataEmissao
                         vals['verify_code'] = \
                             comp.Nfse.InfNfse.CodigoVerificacao
+                    xml_file = processador._generateds_to_string_etree(
+                        processo.resposta)[0]
+                    record.number = vals['number']
+                    record.autorizacao_event_id.set_done(xml_file)
                     record._change_state(SITUACAO_EDOC_AUTORIZADA)
 
             record.write(vals)
