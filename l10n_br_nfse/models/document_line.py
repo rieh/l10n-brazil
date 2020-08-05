@@ -27,6 +27,9 @@ class DocumentLine(models.Model):
         if self.product_id and self.product_id.fiscal_deductions_value:
             self.fiscal_deductions_value = \
                 self.product_id.fiscal_deductions_value
+
+    @api.onchange("product_id")
+    def _onchange_city_taxation_code(self):
         if self.product_id and self.product_id.city_taxation_code_id:
             company_city_id = self.document_id.company_id.city_id
             city_id = self.product_id.city_taxation_code_id.filtered(
