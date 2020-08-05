@@ -25,6 +25,12 @@
             <field name="city" position="replace">
                 <field name="city_id" placeholder="City" class="o_address_city"/>
             </field>
+            <field name="street2" position="replace">
+                <field name="district" placeholder="District..." class="o_address_street"/>
+            </field>
+            <field name="street_number2" position="replace">
+                <field name="street2"/>
+            </field>
         </field>
     </record>
 
