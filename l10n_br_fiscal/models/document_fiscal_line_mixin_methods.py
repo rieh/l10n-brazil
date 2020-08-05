@@ -751,6 +751,15 @@ class FiscalDocumentLineMixinMethods(models.AbstractModel):
     def _onchange_ncm_id(self):
         self._onchange_fiscal_operation_id()
 
-    @api.onchange('fiscal_tax_ids')
+    @api.onchange('fiscal_tax_ids',
+                  'issqn_tax_id',
+                  'price_unit',
+                  'discount',
+                  'fiscal_price',
+                  'fiscal_quantity',
+                  'discount_value',
+                  'freight_value',
+                  'insurance_value',
+                  'other_costs_value')
     def _onchange_fiscal_tax_ids(self):
         self._update_taxes()
