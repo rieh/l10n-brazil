@@ -48,14 +48,15 @@
         # 'views/account_payment_order_menu_views.xml', TODO REMOVE
 
         # Wizards
-        'wizard/account_payment_line_create_view.xml',
+        'wizards/account_payment_line_create_view.xml',
     ],
     'demo': [
-        'demo/account_payment_order_demo.xml',
-        'demo/account_payment_mode_demo.xml'
-        'demo/res_users.xml',
+        'demo/res_partner_bank.xml',
         'demo/account_journal.xml',
+        'demo/account_payment_mode_demo.xml',
+        'demo/account_payment_order_demo.xml',
         'demo/account_invoice.xml',
+        'demo/res_users.xml',
     ],
     'installable': True,
 }
