@@ -14,7 +14,7 @@
     <record id="payment_mode_cobranca_bradesco400" model="account.payment.mode">
         <field name="name">Cobrança Bradesco400</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="instrucoes">Pagavel em qualquer banco ate o vencimento</field>
+        <field name="instructions">Pagavel em qualquer banco ate o vencimento</field>
         <field name="bank_account_link">fixed</field>
         <field name="fixed_journal_id" ref="bradesco_journal"/>
         <field name="payment_order_ok">True</field>
@@ -31,7 +31,7 @@
     <record id="payment_mode_cobranca_unicred400" model="account.payment.mode">
         <field name="name">Cobrança Unicred400</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="instrucoes">Pagavel em qualquer banco ate o vencimento</field>
+        <field name="instructions">Pagavel em qualquer banco ate o vencimento</field>
         <field name="bank_account_link">fixed</field>
         <field name="fixed_journal_id" ref="unicred_journal"/>
         <field name="payment_order_ok">True</field>
@@ -51,7 +51,7 @@
     <record id="payment_mode_cobranca_unicred240" model="account.payment.mode">
         <field name="name">Cobrança Unicred240</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="instrucoes">Pagavel em qualquer banco ate o vencimento</field>
+        <field name="instructions">Pagavel em qualquer banco ate o vencimento</field>
         <field name="bank_account_link">fixed</field>
         <field name="fixed_journal_id" ref="unicred_journal"/>
         <field name="payment_order_ok">True</field>
@@ -71,7 +71,7 @@
     <record id="payment_mode_cobranca_itau240" model="account.payment.mode">
         <field name="name">Cobrança Itau240</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="instrucoes">Pagavel em qualquer banco ate o vencimento</field>
+        <field name="instructions">Pagavel em qualquer banco ate o vencimento</field>
         <field name="bank_account_link">fixed</field>
         <field name="fixed_journal_id" ref="itau_journal"/>
         <field name="payment_order_ok">True</field>
@@ -88,7 +88,7 @@
     <record id="payment_mode_cobranca_cef240" model="account.payment.mode">
         <field name="name">Cobrança Caixa Economica Federal 240</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="instrucoes">Pagavel em qualquer banco ate o vencimento</field>
+        <field name="instructions">Pagavel em qualquer banco ate o vencimento</field>
         <field name="bank_account_link">fixed</field>
         <field name="fixed_journal_id" ref="cef_journal"/>
         <field name="payment_order_ok">True</field>
@@ -105,7 +105,7 @@
     <record id="payment_mode_cobranca_itau400" model="account.payment.mode">
         <field name="name">Cobrança Itau400</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="instrucoes">Pagavel em qualquer banco ate o vencimento</field>
+        <field name="instructions">Pagavel em qualquer banco ate o vencimento</field>
         <field name="bank_account_link">fixed</field>
         <field name="fixed_journal_id" ref="itau_journal"/>
         <field name="payment_order_ok">True</field>
@@ -122,7 +122,7 @@
     <record id="payment_mode_cobranca_bb400" model="account.payment.mode">
         <field name="name">Cobrança Banco do Brasil 400</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="instrucoes">Pagavel em qualquer banco ate o vencimento</field>
+        <field name="instructions">Pagavel em qualquer banco ate o vencimento</field>
         <field name="bank_account_link">fixed</field>
         <field name="fixed_journal_id" ref="bb_journal"/>
         <field name="payment_order_ok">True</field>
