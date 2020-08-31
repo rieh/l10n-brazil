@@ -98,3 +98,7 @@ class FiscalDocumentMixin(models.AbstractModel):
         string='Pagamentos',
         copy=True,
     )
+
+    additional_data = fields.Text(
+        string='Additional Data',
+    )
