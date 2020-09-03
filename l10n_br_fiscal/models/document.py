@@ -117,6 +117,10 @@ class Document(models.Model):
             record.amount_total = sum(
                 line.amount_total for line in record.line_ids)
 
+    @api.depends("amount_total", "fiscal_payment_ids")
+    def _compute_payment_change_value(self):
+        self._abstract_compute_payment_change_value()
+
     # used mostly to enable _inherits of account.invoice on
     # fiscal_document when existing invoices have no fiscal document.
     active = fields.Boolean(
@@ -607,6 +611,29 @@ class Document(models.Model):
         comodel_name='l10n_br_fiscal.document.line',
         inverse_name='document_id',
         string='Document Lines',
+        copy=True,
+    )
+
+    #
+    # Duplicatas e pagamentos
+    #
+    payment_term_id = fields.Many2one(
+        comodel_name='l10n_br_fiscal.payment.term',
+        string='Condição de pagamento',
+        ondelete='restrict',
+    )
+
+    financial_ids = fields.One2many(
+        comodel_name='l10n_br_fiscal.payment.line',
+        inverse_name='document_id',
+        string='Duplicatas',
+        copy=True,
+    )
+
+    fiscal_payment_ids = fields.One2many(
+        comodel_name='l10n_br_fiscal.payment',
+        inverse_name='document_id',
+        string='Pagamentos',
         copy=True,
     )
 
