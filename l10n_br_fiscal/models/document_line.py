@@ -70,6 +70,7 @@ class DocumentLine(models.Model):
 
     fiscal_operation_id = fields.Many2one(
         domain=lambda self: self._operation_domain(),
+        readonly=True,
     )
 
     document_id = fields.Many2one(
@@ -86,11 +87,6 @@ class DocumentLine(models.Model):
 
     name = fields.Text(
         string='Name',
-    )
-
-    document_id = fields.Many2one(
-        comodel_name='l10n_br_fiscal.document',
-        string='Document',
     )
 
     company_id = fields.Many2one(

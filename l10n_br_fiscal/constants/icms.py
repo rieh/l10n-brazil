@@ -65,6 +65,8 @@ ICMS_CST = [
     "90"
 ]
 
+ICMS_ST_CST_CODES = ('60', '40')
+
 
 ICMS_BASE_TYPE = [
     ("0", "Margem Valor Agregado (%)"),

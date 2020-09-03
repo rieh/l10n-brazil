@@ -172,6 +172,7 @@ class Document(models.Model):
 
     document_type_id = fields.Many2one(
         comodel_name='l10n_br_fiscal.document.type',
+        required=True,
     )
 
     operation_name = fields.Char(
@@ -635,15 +636,6 @@ class Document(models.Model):
         default='1',
     )
 
-    ind_final = fields.Selection(
-        selection=[
-            ('0', 'Não'),
-            ('1', 'Sim')
-        ],
-        string='Operação com consumidor final',
-        default='1',
-    )
-
     document_event_ids = fields.One2many(
         comodel_name='l10n_br_fiscal.document.event',
         inverse_name='fiscal_document_id',
@@ -851,6 +843,10 @@ class Document(models.Model):
     @api.onchange('fiscal_operation_id')
     def _onchange_fiscal_operation_id(self):
         super()._onchange_fiscal_operation_id()
+
+        if self.fiscal_operation_id:
+            self.ind_final = self.fiscal_operation_id.ind_final
+
         if self.issuer == DOCUMENT_ISSUER_COMPANY:
             self.document_type_id = self.company_id.document_type_id
 
