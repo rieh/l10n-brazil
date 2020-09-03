@@ -22,6 +22,7 @@
 
         # Views
         'views/l10n_br_account_tax_template.xml',
+        'views/account_chart_template.xml',
         'views/account_tax_template.xml',
         'views/account_tax.xml',
     ],
