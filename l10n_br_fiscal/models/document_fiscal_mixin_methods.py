@@ -9,6 +9,9 @@ class FiscalDocumentMixinMethods(models.AbstractModel):
     _name = 'l10n_br_fiscal.document.mixin.methods'
     _description = 'Document Fiscal Mixin Methods'
 
+    def _compute_payment_change_value(self):
+        self._abstract_compute_payment_change_value()
+
     @api.multi
     def _prepare_br_fiscal_dict(self, default=False):
         self.ensure_one()
