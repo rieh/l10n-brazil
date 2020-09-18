@@ -281,6 +281,12 @@ class AccountPaymentMode(models.Model):
         help='Conta padrão para a Tarifa Bancaria',
     )
 
+    payment_mode_line_ids = fields.One2many(
+        comodel_name='account.payment.mode.line',
+        inverse_name='payment_mode_id',
+        string='Payment Mode Lines',
+    )
+
     _sql_constraints = [(
         "internal_sequence_id_unique",
         "unique(internal_sequence_id)",
