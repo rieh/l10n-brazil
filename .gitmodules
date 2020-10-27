@@ -26,3 +26,7 @@
 	path = branches/sale_stock
 	url = https://github.com/odoo-brazil/l10n-brazil.git
 	branch = 12.0-mig-l10n_br_sale_stock
+[submodule "branches/payment_cielo"]
+	path = branches/payment_cielo
+	url = https://github.com/kmee/l10n-brazil.git
+	branch = feature/payment_cielo
