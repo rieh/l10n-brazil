@@ -11,3 +11,4 @@ lxml==4.2.3
 -e git://github.com/erpbrasil/nfelib.git#egg=nfelib
 -e git://github.com/erpbrasil/nfselib.git@feature/ginfes2#egg=nfselib
 -e git+https://github.com/OCA/openupgradelib.git@master#egg=openupgradelib
+pillow==5.2.0
