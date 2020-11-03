@@ -30,3 +30,7 @@
 	path = branches/payment_cielo
 	url = https://github.com/kmee/l10n-brazil.git
 	branch = feature/payment_cielo
+[submodule "branches/paulistana"]
+	path = branches/paulistana
+	url = https://github.com/odoo-brazil/l10n-brazil.git
+	branch = 12.0-nfse-paulistana
