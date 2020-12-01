@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="cnab_view_move_line_form_inherit" model="ir.ui.view">
+        <field name="name">cnab.account.move.line.form.inherit</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_form"/>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <sheet position="before">
+                <header>
+                    <field name="payment_method_code" invisible="1"/>
+                    <button
+                        string="Update CNAB Information"
+                        type="action"
+                        name="%(account_move_line_change_act_window)d"
+                        attrs="{'invisible': [('payment_method_code', 'not in', ('400', '240', '500'))]}"
+                    />
+                </header>
+            </sheet>
+            <group name="payments" position="after">
+                <group string="Informações do CNAB"
+                       attrs="{'invisible': [('payment_method_code', 'not in', ('400', '240', '500'))]}">
+                    <field name="cnab_state" readonly="1"/>
+                    <field name="payment_situation" readonly="1"/>
+                    <field name="own_number" readonly="1"/>
+                    <field name="document_number" readonly="1"/>
+                    <field name="mov_instruction_code_id" readonly="1"/>
+                    <field name="company_title_identification" readonly="1"/>
+                    <field name="instructions"/>
+                </group>
+            </group>
+            <sheet position="after">
+                <div class="oe_chatter">
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </sheet>
+        </field>
+    </record>
+
+    <record id="cnab_view_move_line_tree_inherit" model="ir.ui.view">
+        <field name="name">cnab.account.move.line.tree.inherit</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account_due_list.view_payments_tree"/>
+        <field name="priority" eval="16"/>
+        <field name="arch" type="xml">
+            <field name="reconciled" position="after">
+                <button
+                    string="Update Information"
+                    type="action"
+                    name="%(account_move_line_change_act_window)d"
+                />
+            </field>
+        </field>
+    </record>
+
+</odoo>
