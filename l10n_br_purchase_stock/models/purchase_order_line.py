@@ -17,4 +17,6 @@ class PurchaseOrderLine(models.Model):
         values = super()._prepare_stock_moves(picking)
         for v in values:
             v.update(self._prepare_br_fiscal_dict())
+            if picking.invoice_state:
+                v['invoice_state'] = picking.invoice_state
         return values
