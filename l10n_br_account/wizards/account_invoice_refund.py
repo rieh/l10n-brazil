@@ -86,7 +86,7 @@ class AccountInvoiceRefund(models.TransientModel):
                         or line.fiscal_operation_id.return_fiscal_operation_id
                     )
 
-                    line._onchange_operation_id()
+                    line._onchange_fiscal_operation_id()
 
                     line_values = {
                         "fiscal_operation_id": line.fiscal_operation_id.id,
