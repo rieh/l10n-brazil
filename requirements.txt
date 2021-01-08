@@ -9,6 +9,7 @@ erpbrasil.edoc.pdf==0.1.0
 nfselib.ginfes==0.2.0
 xmldiff==2.4
 lxml==4.2.3
--e git://github.com/erpbrasil/nfelib.git#egg=nfelib
--e git+https://github.com/OCA/openupgradelib.git@master#egg=openupgradelib
+-e git://github.com/erpbrasil/nfelib.git@feature/distribuicao#egg=nfelib
+-e git+https://github.com/kmee/openupgradelib.git@master#egg=openupgradelib
 pillow==5.2.0
+nfselib.paulistana==0.2.0
