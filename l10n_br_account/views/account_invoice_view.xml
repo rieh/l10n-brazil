@@ -80,6 +80,9 @@
                     <field name="fiscal_document_id" invisible="1"/>
                 </group>
             </xpath>
+            <field name="account_id" position="attributes">
+                <attribute name="domain">[('company_id', '=', company_id), ('deprecated', '=', False)]</attribute>
+            </field>
         </field>
     </record>
 
